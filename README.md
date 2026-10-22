@@ -1,6 +1,6 @@
 # Book Genre Classifier: Fiction vs Nonfiction
 
-An end-to-end machine learning project that scrapes data from a website and predicts whether a book is **fiction** or **nonfiction** from its title and description.
+An end-to-end machine learning project with scraping of data from a website and predicting whether a book is **fiction** or **nonfiction** from its title and description.
 
 ## Results
 
