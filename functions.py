@@ -16,6 +16,9 @@ def find_details(soup, collection, category):
     description = soup.find('article', class_="product_page").find_all('p')[3].text.strip()
     if description[-8:] == " ...more":
         description = description[:-8]
+    idx = description.find(description[:40], 1)
+    if idx > 0:
+        description = description[idx:]
     collection.append({"title" : title,
                         "image" : image,
                         "description" : description,

@@ -8,12 +8,12 @@ An end-to-end machine learning project with scraping of data from a website and 
 |---|---|---|---|
 | Baseline (always predict "nonfiction") | 63.6% | 0% | 100% |
 | Logistic Regression | 64% | 6% | 96% |
-| + balanced class weights | 77% | 50% | 93% |
-| + balanced class weights + stop-word removal | 80% | 62% | 89% |
+| + balanced class weights | 80% | 56% | 93% |
+| + balanced class weights + stop-word removal | 84% | 62% | 96% |
 
 *Evaluated on a test set of 44 books.*
 
-**Key finding:** the first model's 64% accuracy looked reasonable, but it is misleading. From the confusion matrix, we learn it predicted "nonfiction" for almost every book, which matches the class distribution + is no better than the baseline. Re-weighting the classes during training made the model actually learn to recognize fiction: fiction recall went from 6% to 50%.
+**Key finding:** the first model's 64% accuracy looked reasonable, but it is misleading. From the confusion matrix, we learn it predicted "nonfiction" for almost every book, which matches the class distribution + is no better than the baseline. Re-weighting the classes during training made the model actually learn to recognize fiction: fiction recall went from 6% to 56%.
 
 ## Data
 
@@ -31,6 +31,7 @@ Used `requests` and `BeautifulSoup`. The scraper finds the category pages, follo
 - Responses are decoded from raw bytes as UTF-8
 - Removed the `...more` truncation marker from descriptions
 - Combined title and description into a single text field
+- Removed the first part of the description, as it repeats itself and fills the dataset with unnecessary data
 
 ### 3. Features: TF-IDF
 Each book becomes a vector with one weight per vocabulary word, around 6000. The vectorizer is fitted on the training set only and then applied to the test set, in order to avoid data leakage.
@@ -39,7 +40,7 @@ Each book becomes a vector with one weight per vocabulary word, around 6000. The
 Chose Logistic Regression because it works well on small text datasets. In each of the three experiments, I made one change at a time:
 1. **Plain logistic regression.** Matches the baseline + almost never predicts fiction
 2. **`class_weight="balanced"`.** Largest improvement, errors on the fiction category (minority class) cost more during training
-3. **English stop-word removal.** Small gain, shrinks the vocabulary from 6,259 to 6,007 words
+3. **English stop-word removal.** Small gain, shrinks the vocabulary from 6,216 to 5,964 words
 
 ### 5. Evaluation
 Provided accuracy, per-class precision and recall, confusion matrices and predicted probabilities after every experiment, all compared against a baseline.
